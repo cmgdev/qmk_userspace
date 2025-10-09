@@ -54,6 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+/*
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     hsv_t hsv = {0, 255, 255}; // HSV_RED
 
@@ -75,3 +76,4 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
     return false;
 }
+*/
