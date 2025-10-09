@@ -53,3 +53,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   )
 };
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    hsv_t hsv = {0, 255, 255}; // HSV_RED
+
+    if (get_highest_layer(layer_state|default_layer_state) == 2) {
+        hsv = (hsv_t){128, 255, 255}; // HSV_CYAN
+    } else {
+        hsv = (hsv_t){36, 255, 255}; // HSV_GOLD
+    }
+
+    if (hsv.v > rgb_matrix_get_val()) {
+        hsv.v = rgb_matrix_get_val();
+    }
+    rgb_t rgb = hsv_to_rgb(hsv);
+
+    for (uint8_t i = led_min; i < led_max; i++) {
+        if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
+            rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+        }
+    }
+    return false;
+}
