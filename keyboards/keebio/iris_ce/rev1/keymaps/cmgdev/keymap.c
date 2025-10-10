@@ -1,6 +1,7 @@
 // Copyright 2023 Danny Nguyen (@nooges)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "color.h"
 #include QMK_KEYBOARD_H
 
 enum custom_layers {
@@ -54,26 +55,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-/*
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    hsv_t hsv = {0, 255, 255}; // HSV_RED
+void keyboard_post_init_user(void) {
+   // Customise these values to desired behaviour
+   debug_enable=true;
+   debug_matrix=true;
+   debug_keyboard=true;
+   //debug_mouse=true;
 
-    if (get_highest_layer(layer_state|default_layer_state) == 2) {
-        hsv = (hsv_t){128, 255, 255}; // HSV_CYAN
-    } else {
-        hsv = (hsv_t){36, 255, 255}; // HSV_GOLD
-    }
 
-    if (hsv.v > rgb_matrix_get_val()) {
-        hsv.v = rgb_matrix_get_val();
-    }
-    rgb_t rgb = hsv_to_rgb(hsv);
-
-    for (uint8_t i = led_min; i < led_max; i++) {
-        if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
-            rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
-        }
-    }
-    return false;
+   rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+   rgb_matrix_sethsv_noeeprom(HSV_CYAN);
 }
-*/
