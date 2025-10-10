@@ -1,6 +1,7 @@
 // Copyright 2023 Danny Nguyen (@nooges)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "action_layer.h"
 #include "color.h"
 #include QMK_KEYBOARD_H
 
@@ -59,10 +60,33 @@ void keyboard_post_init_user(void) {
    // Customise these values to desired behaviour
    debug_enable=true;
    debug_matrix=true;
-   debug_keyboard=true;
+   //debug_keyboard=true;
    //debug_mouse=true;
 
 
    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
    rgb_matrix_sethsv_noeeprom(HSV_CYAN);
+}
+
+layer_state_t last_state = _QWERTY;
+
+bool rgb_matrix_indicators_user(void) {
+    layer_state_t l_state = get_highest_layer(layer_state | default_layer_state);
+    if (last_state != l_state) {
+        switch (l_state) {
+            case _QWERTY:
+                rgb_matrix_sethsv_noeeprom(HSV_CYAN);
+                break;
+            case _LOWER:
+                rgb_matrix_sethsv_noeeprom(HSV_YELLOW);
+                break;
+            case _RAISE:
+                rgb_matrix_sethsv_noeeprom(HSV_MAGENTA);
+                break;
+            default:
+                break;
+        }
+        last_state = l_state;
+    }
+    return false;
 }
