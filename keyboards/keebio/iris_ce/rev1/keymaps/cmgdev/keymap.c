@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "action_layer.h"
+#include "caps_word.h"
 #include "color.h"
+#include "rgb_matrix.h"
 #include QMK_KEYBOARD_H
 
 enum custom_layers {
@@ -89,4 +91,49 @@ bool rgb_matrix_indicators_user(void) {
         last_state = l_state;
     }
     return false;
+}
+
+void set_leds(const int *leds, int size, int red, int green, int blue) {
+    for (int i = 0; i < size; i++) {
+        rgb_matrix_set_color(leds[i], red, green, blue);
+    }
+}
+
+const int left_shift_key = 26;
+const int lower_layer_boot_key = 10;
+const int raise_layer_boot_key = 48;
+const int wasd_leds[] = {12, 16, 17, 18};
+const int wasd_leds_size = sizeof(wasd_leds) / sizeof(wasd_leds[0]);  // wasd_leds_size is the number of bytes in wasd_leds, not the number of elements.
+const int num_pad_leds[] = {44, 45, 46, 47, 53, 52, 51, 56, 57, 58};
+const int num_pad_leds_size = sizeof(num_pad_leds) / sizeof(num_pad_leds[0]);
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (is_caps_word_on()) {
+        rgb_matrix_set_color(left_shift_key, RGB_GREEN);
+    }
+
+    switch (get_highest_layer(layer_state | default_layer_state)) {
+      case _LOWER:
+
+         // set the wasd arrow keys to magenta
+         set_leds(wasd_leds, wasd_leds_size, RGB_MAGENTA);
+
+         // set the boot key to red
+         rgb_matrix_set_color(lower_layer_boot_key, RGB_RED);
+
+         // set the num pad to azure
+         set_leds(num_pad_leds, num_pad_leds_size, RGB_AZURE);
+
+         break;
+      case _RAISE:
+         
+         // set the boot key to red
+         rgb_matrix_set_color(raise_layer_boot_key, RGB_RED);
+         
+         break;
+      default:
+         break;
+    }
+                
+    return true;
 }
