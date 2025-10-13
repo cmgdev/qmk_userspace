@@ -2,9 +2,9 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../qmk_firmware"
 		}
-	]
+	],
+	"settings": {
+		"github-actions.workflows.pinned.workflows": []
+	}
 }
